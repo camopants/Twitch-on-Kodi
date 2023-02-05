@@ -5,17 +5,10 @@
 <table>
 <tr>
     <td align="center">
-        <a href="https://github.com/MrSprigster">
-            <img src="https://avatars.githubusercontent.com/u/6219686?v=4" width="100;" alt="MrSprigster"/>
+        <a href="https://github.com/camopants">
+            <img src="https://avatars.githubusercontent.com/u/17296897?v=4" width="100;" alt="camopants"/>
             <br />
-            <sub><b>MrSprigster</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/anxdpanic">
-            <img src="https://avatars.githubusercontent.com/u/17665050?v=4" width="100;" alt="anxdpanic"/>
-            <br />
-            <sub><b>anxdpanic</b></sub>
+            <sub><b>camopants</b></sub>
         </a>
     </td></tr>
 </table>
@@ -332,13 +325,6 @@
             <img src="https://avatars.githubusercontent.com/u/1407288?v=4" width="100;" alt="kravone"/>
             <br />
             <sub><b>kravone</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/lucabric">
-            <img src="https://avatars.githubusercontent.com/u/1241765?v=4" width="100;" alt="lucabric"/>
-            <br />
-            <sub><b>lucabric</b></sub>
         </a>
     </td>
     <td align="center">
