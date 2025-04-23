@@ -9,8 +9,7 @@
     See LICENSES/GPL-3.0-only for more information.
 """
 
-from six import PY2
-from six.moves.urllib_parse import quote
+from urllib.parse import quote
 
 from . import menu_items
 from .common import kodi
@@ -50,17 +49,12 @@ class JsonListItemConverter(object):
 
     def game_to_listitem(self, game):
         name = game[Keys.NAME]
-        if name and PY2:
-            name = name.encode('utf-8', 'ignore')
         if not name:
             name = i18n('unknown_game')
 
         image = self.get_boxart(game.get(Keys.BOX_ART_URL), Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow_game(game[Keys.ID], name, follow=True))
-            context_menu.extend(menu_items.edit_follow_game(game[Keys.ID], name, follow=False))
         plot = '{name}'.format(name=name)
         return {'label': name,
                 'path': kodi.get_plugin_url({'mode': MODES.GAMELISTS, 'game_name': name, 'game_id': game[Keys.ID]}),
@@ -73,15 +67,11 @@ class JsonListItemConverter(object):
         if 'viewersCount' in game:
             viewer_count = str(game['viewersCount'])
         name = game['displayName']
-        if name and PY2:
-            name = name.encode('utf-8', 'ignore')
         if not name:
             name = i18n('unknown_game')
         image = self.get_boxart(game['boxArtURL'], Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow_game(game['id'], name, follow=False))
         plot = '{name}\r\n{viewers}:{viewer_count}' \
             .format(name=name, viewers=i18n('viewers'), viewer_count=viewer_count)
         return {'label': name,
@@ -96,8 +86,6 @@ class JsonListItemConverter(object):
         context_menu = list()
         context_menu.extend(menu_items.refresh())
         name = channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.LOGIN)
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow(channel[Keys.ID], name))
         return {'label': name,
                 'path': kodi.get_plugin_url({'mode': MODES.CHANNELVIDEOS, 'channel_id': channel[Keys.ID],
                                              'channel_name': channel[Keys.LOGIN], 'display_name': name}),
@@ -115,8 +103,6 @@ class JsonListItemConverter(object):
         context_menu = list()
         context_menu.extend(menu_items.refresh())
         display_name = to_string(clip.get(Keys.BROADCASTER_NAME))
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow(clip[Keys.BROADCASTER_ID], display_name))
         context_menu.extend(menu_items.channel_videos(clip[Keys.BROADCASTER_ID], display_name, display_name))
         context_menu.extend(menu_items.set_default_quality('clip', clip[Keys.BROADCASTER_ID],
                                                            display_name, clip_id=clip[Keys.ID]))
@@ -144,8 +130,6 @@ class JsonListItemConverter(object):
         context_menu.extend(menu_items.refresh())
         display_name = to_string(video.get(Keys.USER_NAME) if video.get(Keys.USER_NAME) else video.get(Keys.USER_LOGIN))
         channel_name = to_string(video[Keys.USER_LOGIN])
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow(video[Keys.USER_ID], display_name))
         context_menu.extend(menu_items.channel_videos(video[Keys.USER_ID], channel_name, display_name))
         context_menu.extend(menu_items.set_default_quality('video', video[Keys.USER_ID],
                                                            video[Keys.USER_LOGIN], video[Keys.USER_ID]))
@@ -177,8 +161,6 @@ class JsonListItemConverter(object):
         context_menu.extend(menu_items.refresh())
         channel_name = to_string(search[Keys.DISPLAY_NAME])
         game_name = to_string(search[Keys.GAME_NAME])
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow(search[Keys.ID], display_name))
         context_menu.extend(menu_items.channel_videos(search[Keys.ID], channel_name, display_name))
         if search[Keys.GAME_NAME]:
             context_menu.extend(menu_items.go_to_game(game_name, search[Keys.GAME_ID]))
@@ -208,8 +190,6 @@ class JsonListItemConverter(object):
         context_menu = list()
         context_menu.extend(menu_items.refresh())
         channel_name = to_string(search[Keys.DISPLAY_NAME])
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow(search[Keys.ID], display_name))
         context_menu.extend(menu_items.channel_videos(search[Keys.ID], channel_name, display_name))
 
         return {'label': title,
@@ -239,8 +219,6 @@ class JsonListItemConverter(object):
         display_name = to_string(stream.get(Keys.USER_NAME) if stream.get(Keys.USER_NAME) else stream.get(Keys.USER_LOGIN))
         channel_name = to_string(stream[Keys.USER_NAME])
         game_name = to_string(stream[Keys.GAME_NAME])
-        if self.has_token:
-            context_menu.extend(menu_items.edit_follow(stream[Keys.USER_ID], display_name))
         context_menu.extend(menu_items.channel_videos(stream[Keys.USER_ID], channel_name, display_name))
         if stream[Keys.GAME_NAME]:
             context_menu.extend(menu_items.go_to_game(game_name, stream[Keys.GAME_ID]))
@@ -420,9 +398,6 @@ class JsonListItemConverter(object):
         if info.get(key) is not None:
             
             info_key = info.get(key)
-            if PY2 and isinstance(info_key, unicode):
-                info_key = info_key.encode('utf-8', 'ignore')
-         
             val_heading = kodi.decode_utf8(headings.get(key))
             val_info = kodi.decode_utf8(info_key)
             value = item_template.format(head=val_heading, info=val_info)
